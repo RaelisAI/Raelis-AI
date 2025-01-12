@@ -1,0 +1,29 @@
+ import random
+
+class AutomatedTradingStrategy:
+    def __init__(self, user_account, market_predictor, trading_executor):
+        self.user_account = user_account
+        self.market_predictor = market_predictor
+        self.trading_executor = trading_executor
+    
+    def execute_trade_based_on_strategy(self):
+        # Simple strategy: buy when price is predicted to increase by 2% or more
+        market_data = self.market_predictor.get_latest_market_data()
+        predicted_price = self.market_predictor.predict_next_price(market_data)
+        
+        # If the predicted price is at least 2% higher than current price, buy
+        current_price = market_data["current_price"]
+        price_change_percentage = (predicted_price - current_price) / current_price * 100
+        
+        if price_change_percentage >= 2:
+            action = "buy"
+            amount = random.randint(1, 5)  # Randomize the amount between 1 and 5 units
+            self.trading_executor.execute_trade(action, amount, predicted_price)
+            self.user_account.update_balance(amount * predicted_price)  # Assuming buying with balance
+            print(f"Executed {action} with {amount} units at price {predicted_price}")
+        else:
+            print("No favorable trading opportunity detected.")
+
+# Example usage
+automated_trading = AutomatedTradingStrategy(user_account, market_predictor, trading_executor)
+automated_trading.execute_trade_based_on_strategy()
