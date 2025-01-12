@@ -1,0 +1,51 @@
+import json
+import os
+
+class UserAccount:
+    def __init__(self, user_id, data_file="user_data.json"):
+        self.user_id = user_id
+        self.data_file = data_file
+        self.user_data = self.load_user_data()
+    
+    def load_user_data(self):
+        if os.path.exists(self.data_file):
+            with open(self.data_file, "r") as file:
+                data = json.load(file)
+                return data.get(str(self.user_id), {})
+        return {}
+    
+    def save_user_data(self):
+        if os.path.exists(self.data_file):
+            with open(self.data_file, "r") as file:
+                data = json.load(file)
+        else:
+            data = {}
+        
+        data[str(self.user_id)] = self.user_data
+        
+        with open(self.data_file, "w") as file:
+            json.dump(data, file, indent=4)
+    
+    def get_balance(self):
+        return self.user_data.get("balance", 0.0)
+    
+    def update_balance(self, amount):
+        self.user_data["balance"] = self.user_data.get("balance", 0.0) + amount
+        self.save_user_data()
+    
+    def get_trade_history(self):
+        return self.user_data.get("trade_history", [])
+    
+    def add_trade(self, trade):
+        if "trade_history" not in self.user_data:
+            self.user_data["trade_history"] = []
+        self.user_data["trade_history"].append(trade)
+        self.save_user_data()
+
+# Example usage
+user_account = UserAccount(user_id=123)
+print(f"User balance: ${user_account.get_balance()}")
+user_account.update_balance(1000)
+print(f"Updated balance: ${user_account.get_balance()}")
+user_account.add_trade({"action": "buy", "amount": 1, "price": 50000, "timestamp": "2025-01-01"})
+print(f"Trade history: {user_account.get_trade_history()}")
