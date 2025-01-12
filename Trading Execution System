@@ -1,0 +1,30 @@
+import time
+
+class TradingExecutor:
+    def __init__(self, exchange_api, trading_strategy):
+        self.exchange_api = exchange_api
+        self.trading_strategy = trading_strategy
+    
+    def execute_trade(self, action, amount, price):
+        if action == "buy":
+            self.exchange_api.place_order("buy", amount, price)
+        elif action == "sell":
+            self.exchange_api.place_order("sell", amount, price)
+    
+    def monitor_market(self, target_price, crypto_id="bitcoin"):
+        while True:
+            current_price = self.exchange_api.get_current_price(crypto_id)
+            if current_price >= target_price:
+                self.execute_trade("buy", 1, current_price)
+            time.sleep(60)  # Check every minute
+
+class MockExchangeAPI:
+    def get_current_price(self, crypto_id="bitcoin"):
+        return 51000  # Mock price
+    
+    def place_order(self, action, amount, price):
+        print(f"Placing {action} order for {amount} units at {price} USD.")
+
+exchange_api = MockExchangeAPI()
+trading_executor = TradingExecutor(exchange_api, None)
+trading_executor.monitor_market(52000)
