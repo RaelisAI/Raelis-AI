@@ -1,0 +1,16 @@
+class MultiCryptoMarketData:
+    def __init__(self):
+        self.crypto_ids = ["bitcoin", "ethereum", "dogecoin", "cardano"]
+        self.market_scraper = MarketDataScraper()
+    
+    def get_market_data_for_multiple_cryptos(self):
+        market_data = {}
+        for crypto_id in self.crypto_ids:
+            data = self.market_scraper.get_market_data([crypto_id])
+            market_data[crypto_id] = data
+        return market_data
+
+# Example usage
+multi_crypto_data = MultiCryptoMarketData()
+market_data = multi_crypto_data.get_market_data_for_multiple_cryptos()
+print(market_data)
