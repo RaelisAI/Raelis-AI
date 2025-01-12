@@ -1,0 +1,13 @@
+class RiskManager:
+    def __init__(self, risk_threshold=0.1):
+        self.risk_threshold = risk_threshold
+    
+    def assess_risk(self, current_balance, market_volatility):
+        risk_factor = market_volatility * (current_balance / 100000)
+        if risk_factor > self.risk_threshold:
+            print("Warning: High risk detected, consider adjusting portfolio.")
+        else:
+            print("Risk level is acceptable.")
+
+risk_manager = RiskManager()
+risk_manager.assess_risk(50000, 0.05)  # Balance: $50,000, Market Volatility: 5%
