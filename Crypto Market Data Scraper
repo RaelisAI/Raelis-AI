@@ -1,0 +1,22 @@
+import requests
+import json
+
+class MarketDataScraper:
+    def __init__(self, base_url="https://api.coingecko.com/api/v3"):
+        self.base_url = base_url
+    
+    def get_market_data(self, crypto_ids=["bitcoin", "ethereum"]):
+        url = f"{self.base_url}/simple/price?ids={','.join(crypto_ids)}&vs_currencies=usd"
+        response = requests.get(url)
+        data = response.json()
+        return data
+    
+    def get_historical_data(self, crypto_id="bitcoin", days=30):
+        url = f"{self.base_url}/coins/{crypto_id}/market_chart?vs_currency=usd&days={days}"
+        response = requests.get(url)
+        data = response.json()
+        return data
+
+market_scraper = MarketDataScraper()
+market_data = market_scraper.get_market_data()
+print(market_data)
