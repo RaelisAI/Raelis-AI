@@ -1,0 +1,16 @@
+class RaelisAIAgent:
+    def __init__(self):
+        self.market_scraper = MarketDataScraper()
+        self.market_predictor = MarketPredictor()
+        self.trading_executor = TradingExecutor(MockExchangeAPI(), None)
+        self.risk_manager = RiskManager()
+
+    def run(self):
+        market_data = self.market_scraper.get_market_data()
+        self.market_predictor.train(market_data)
+        predicted_price = self.market_predictor.predict(1616524800)
+        self.risk_manager.assess_risk(50000, 0.05)
+        self.trading_executor.monitor_market(predicted_price[0])
+
+raelis_ai = RaelisAIAgent()
+raelis_ai.run()
