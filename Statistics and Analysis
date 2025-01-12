@@ -1,0 +1,30 @@
+import matplotlib.pyplot as plt
+
+class TradeStatistics:
+    def __init__(self, user_account):
+        self.user_account = user_account
+    
+    def generate_trade_statistics(self):
+        trade_history = self.user_account.get_trade_history()
+        trade_prices = [trade["price"] for trade in trade_history]
+        trade_amounts = [trade["amount"] for trade in trade_history]
+        
+        total_spent = sum([price * amount for price, amount in zip(trade_prices, trade_amounts)])
+        total_trades = len(trade_history)
+        
+        print(f"Total Trades: {total_trades}")
+        print(f"Total Spent: ${total_spent}")
+        
+        # Plotting the trade prices
+        self.plot_trade_prices(trade_prices)
+    
+    def plot_trade_prices(self, trade_prices):
+        plt.plot(range(len(trade_prices)), trade_prices)
+        plt.xlabel('Trade Number')
+        plt.ylabel('Price (USD)')
+        plt.title('Trade Price History')
+        plt.show()
+
+# Example usage
+trade_statistics = TradeStatistics(user_account)
+trade_statistics.generate_trade_statistics()
