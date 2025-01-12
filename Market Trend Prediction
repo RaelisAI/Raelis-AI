@@ -1,0 +1,27 @@
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+class MarketPredictor:
+    def __init__(self):
+        self.model = LinearRegression()
+    
+    def train(self, historical_data):
+        dates = np.array([data["timestamp"] for data in historical_data]).reshape(-1, 1)
+        prices = np.array([data["price"] for data in historical_data])
+        self.model.fit(dates, prices)
+    
+    def predict(self, future_date):
+        future_date = np.array([[future_date]])
+        predicted_price = self.model.predict(future_date)
+        return predicted_price
+
+historical_data = [
+    {"timestamp": 1616265600, "price": 50000},
+    {"timestamp": 1616352000, "price": 51000},
+    {"timestamp": 1616438400, "price": 52000}
+]
+
+predictor = MarketPredictor()
+predictor.train(historical_data)
+future_price = predictor.predict(1616524800)  # Predict price for a future timestamp
+print(f"Predicted Price: ${future_price[0]:.2f}")
