@@ -1,0 +1,29 @@
+import logging
+
+class Logger:
+    def __init__(self, log_file="raelis_ai.log"):
+        self.log_file = log_file
+        self.setup_logger()
+    
+    def setup_logger(self):
+        self.logger = logging.getLogger("RaelisAI")
+        handler = logging.FileHandler(self.log_file)
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+    
+    def log_trade(self, action, amount, price):
+        self.logger.info(f"Trade Executed: {action} {amount} units at ${price}")
+    
+    def log_error(self, error_message):
+        self.logger.error(f"Error: {error_message}")
+    
+    def log_info(self, message):
+        self.logger.info(f"Info: {message}")
+
+# Example usage
+logger = Logger()
+logger.log_info("Raelis AI Agent started.")
+logger.log_trade("buy", 2, 50000)
+logger.log_error("Market data API failed to respond.")
